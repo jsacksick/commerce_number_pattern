@@ -1,5 +1,5 @@
 commerce_number_pattern.configuration:
-  path: '/admin/commerce/config/number-patterns'
+  path: '/admin/commerce/config/patterns'
   defaults:
     _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
     _title: 'Number patterns'
