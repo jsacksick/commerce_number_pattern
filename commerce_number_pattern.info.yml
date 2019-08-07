@@ -1,0 +1,9 @@
+name: Commerce number pattern
+type: module
+description: 'Provides a config entity for generating configurable number patterns for orders/invoices.'
+package: Commerce
+core: 8.x
+dependencies:
+  - commerce:commerce_store
+  - entity:entity
+  - token:token

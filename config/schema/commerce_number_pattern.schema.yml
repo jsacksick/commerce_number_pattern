@@ -1,0 +1,18 @@
+commerce_number_pattern.commerce_number_pattern.*:
+  type: config_entity
+  label: 'Number pattern'
+  mapping:
+    id:
+      type: string
+      label: 'Machine-readable name'
+    label:
+      type: label
+      label: 'Label'
+    type:
+      type: string
+      label: 'Pattern type'
+    plugin:
+      type: string
+      label: 'Number generator plugin'
+    configuration:
+      type: commerce_number_pattern.commerce_number_generator.plugin.[%parent.plugin]
