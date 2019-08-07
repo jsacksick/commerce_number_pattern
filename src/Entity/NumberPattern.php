@@ -52,7 +52,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *     "edit-form" = "/admin/commerce/config/number-patterns/{commerce_number_pattern}/edit",
  *     "duplicate-form" = "/admin/commerce/config/number-patterns/{commerce_number_pattern}/duplicate",
  *     "delete-form" = "/admin/commerce/config/number-patterns/{commerce_number_pattern}/delete",
- *     "collection" = "/admin/commerce/config/number-patterns"
+ *     "collection" = "/admin/commerce/config/number-patterns/list"
  *   }
  * )
  */

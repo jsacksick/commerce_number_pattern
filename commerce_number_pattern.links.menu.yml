@@ -1,5 +1,11 @@
+commerce_number_pattern.configuration:
+  title: 'Number patterns'
+  route_name: 'commerce_number_pattern.configuration'
+  parent: 'commerce.configuration'
+  weight: -5
+
 entity.commerce_number_pattern.collection:
   title: 'Number patterns'
   route_name: 'entity.commerce_number_pattern.collection'
-  parent: 'commerce.configuration'
+  parent: 'commerce_number_pattern.configuration'
   description: 'Manage number patterns for Commerce entities.'
