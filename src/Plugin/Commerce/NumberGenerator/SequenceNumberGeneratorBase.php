@@ -191,7 +191,9 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
     if (!$form_state->getErrors()) {
       $values = $form_state->getValue($form['#parents']);
       $this->configuration['initialSequence'] = $values['initialSequence'];
-      $this->configuration['perStoreSequence'] = $values['perStoreSequence'];
+      if (isset($values['perStoreSequence'])) {
+        $this->configuration['perStoreSequence'] = $values['perStoreSequence'];
+      }
     }
   }
 
