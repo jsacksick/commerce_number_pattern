@@ -31,8 +31,8 @@ class Monthly extends SequenceNumberGeneratorBase {
     $current_time = DrupalDateTime::createFromTimestamp($this->time->getCurrentTime());
     $generated_time = DrupalDateTime::createFromTimestamp($last_sequence->getGeneratedTime());
 
-    // The invoice number sequence should be reset if the last sequential number
-    // was not generated during the same month.
+    // The sequence should be reset if the last sequential number was not
+    // generated during the same month.
     if (($generated_time->format('Y') != $current_time->format('Y')) ||
       ($generated_time->format('m') != $current_time->format('m'))) {
       return TRUE;

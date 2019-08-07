@@ -89,7 +89,7 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
         'store_id' => $store_id,
       ]);
     }
-    $this->connection->merge('commerce_invoice_number_sequence')
+    $this->connection->merge('commerce_number_pattern_sequence')
       ->fields([
         'sequence' => $sequence['sequence'],
         'generated' => $sequence['generated'],
