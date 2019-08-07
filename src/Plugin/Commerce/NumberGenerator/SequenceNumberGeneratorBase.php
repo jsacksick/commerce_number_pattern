@@ -56,7 +56,7 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
     $query
       ->condition('entity_id', $this->entityId)
       ->condition('store_id', $this->getStoreId($entity));
-    $result = $query->execute()->fetchCol();
+    $result = $query->execute()->fetchAssoc();
 
     if (empty($result)) {
       return NULL;
@@ -91,8 +91,10 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
     }
     $this->connection->merge('commerce_number_pattern_sequence')
       ->fields([
-        'sequence' => $sequence['sequence'],
-        'generated' => $sequence['generated'],
+        'entity_id' => $this->entityId,
+        'sequence' => $sequence->getSequence(),
+        'generated' => $sequence->getGeneratedTime(),
+        'store_id' => $store_id,
       ])
       ->keys([
         'entity_id' => $this->entityId,

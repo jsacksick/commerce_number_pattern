@@ -16,3 +16,38 @@ commerce_number_pattern.commerce_number_pattern.*:
       label: 'Number generator plugin'
     configuration:
       type: commerce_number_pattern.commerce_number_generator.plugin.[%parent.plugin]
+
+commerce_number_pattern.commerce_number_generator.plugin.*:
+  type: mapping
+  mapping:
+    pattern:
+      type: string
+      label: 'Pattern'
+    padding:
+      type: integer
+      label: 'Padding'
+
+commerce_number_pattern.commerce_number_generator.plugin.infinite:
+  type: commerce_number_generator_with_sequence
+
+commerce_number_pattern.commerce_number_generator.plugin.monthly:
+  type: commerce_number_generator_with_sequence
+
+commerce_number_pattern.commerce_number_generator.plugin.yearly:
+  type: commerce_number_generator_with_sequence
+
+commerce_number_generator_with_sequence:
+  type: mapping
+  mapping:
+    pattern:
+      type: string
+      label: 'Pattern'
+    padding:
+      type: integer
+      label: 'Padding'
+    initialSequence:
+      type: integer
+      label: 'Initial sequence'
+    perStoreSequence:
+      type: boolean
+      label: 'Per store sequence'

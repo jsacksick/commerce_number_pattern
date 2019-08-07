@@ -4,7 +4,7 @@ namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberGenerator;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 
-interface SupportsSequenceInterface {
+interface SupportsSequenceInterface extends NumberGeneratorInterface {
 
   /**
    * Gets the initial sequence.
