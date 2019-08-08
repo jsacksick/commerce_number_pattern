@@ -5,6 +5,11 @@ namespace Drupal\Tests\commerce_number_pattern\FunctionalJavascript;
 use Drupal\commerce_number_pattern\Entity\NumberPattern;
 use Drupal\Tests\commerce\FunctionalJavascript\CommerceWebDriverTestBase;
 
+/**
+ * Tests the number pattern admin UI.
+ *
+ * @group commerce_number_pattern
+ */
 class NumberPatternTest extends CommerceWebDriverTestBase {
 
   /**
