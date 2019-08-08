@@ -52,9 +52,15 @@ class InfiniteTest extends NumberGeneratorTestBase {
     $this->assertEquals('INV-1000', $number_generator->generate($this->entity));
     $this->assertEquals('INV-1001', $number_generator->generate($this->entity));
 
+    // Test the token replacement.
+    $configuration = $number_generator->getConfiguration();
+    $configuration['pattern'] = 'INV-[entity_test_with_store:store_id:target_id]-{sequence}';
+    $number_generator->setConfiguration($configuration);
+    $this->assertEquals('INV-1-1002', $number_generator->generate($this->entity));
+
     $this->entity->setStoreId($this->store2);
     $this->entity->save();
-    $this->assertEquals('INV-1000', $number_generator->generate($this->entity));
+    $this->assertEquals('INV-2-1000', $number_generator->generate($this->entity));
 
     // Test the padding.
     $configuration = $number_generator->getConfiguration();
@@ -62,7 +68,7 @@ class InfiniteTest extends NumberGeneratorTestBase {
     $configuration['initialSequence'] = 1;
     $number_generator->setConfiguration($configuration);
     $number_generator->resetSequence();
-    $this->assertEquals('INV-0001', $number_generator->generate($this->entity));
+    $this->assertEquals('INV-2-0001', $number_generator->generate($this->entity));
   }
 
 }

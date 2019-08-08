@@ -37,13 +37,14 @@ class MonthlyTest extends NumberGeneratorTestBase {
     $number_generator = $this->numberGeneratorManager->createInstance('monthly', [
       '_entity_id' => 'test',
     ]);
-    $current_month = date('Y-m');
-    $this->assertEquals($current_month . '-1', $number_generator->generate($this->entity));
-    $this->assertEquals($current_month . '-2', $number_generator->generate($this->entity));
+    $current_date = date('Y-m');
+    $this->assertEquals($current_date . '-1', $number_generator->generate($this->entity));
+    $this->assertEquals($current_date . '-2', $number_generator->generate($this->entity));
     $configuration = $number_generator->getConfiguration();
     $configuration['padding'] = 5;
+    $configuration['pattern'] = '[current-date:custom:Y-m]-[entity_test_with_store:store_id:target_id]-{sequence}';
     $number_generator->setConfiguration($configuration);
-    $this->assertEquals($current_month . '-00003', $number_generator->generate($this->entity));
+    $this->assertEquals($current_date . '-1-00003', $number_generator->generate($this->entity));
   }
 
 }

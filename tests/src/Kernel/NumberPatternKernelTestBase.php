@@ -22,7 +22,7 @@ abstract class NumberPatternKernelTestBase extends CommerceKernelTestBase {
     'entity_reference_revisions',
     'commerce_number_pattern_test',
     'commerce_number_pattern',
-    'token'
+    'token',
   ];
 
   /**
@@ -31,6 +31,8 @@ abstract class NumberPatternKernelTestBase extends CommerceKernelTestBase {
   protected function setUp() {
     parent::setUp();
 
+    // Tests are crashing without the following line.
+    $this->installConfig(['system']);
     $this->installSchema('commerce_number_pattern', ['commerce_number_pattern_sequence']);
     $this->installEntitySchema('entity_test_with_store');
   }
