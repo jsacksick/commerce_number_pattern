@@ -79,7 +79,7 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
     }
     $sequence = $this->getLastSequence($entity);
     $store_id = $this->getStoreId($entity);
-    if (!$sequence || $this->shouldReset($sequence))  {
+    if (!$sequence || $this->shouldReset($sequence)) {
       $sequence = $this->getInitialSequence($entity);
     }
     else {
@@ -98,7 +98,7 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
       ])
       ->keys([
         'entity_id' => $this->entityId,
-        'store_id' => $store_id
+        'store_id' => $store_id,
       ])
       ->execute();
     $this->lock->release($lock_name);
@@ -125,7 +125,7 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
   /**
    * Gets the store_id to use for the sequence.
    *
-   * @param ContentEntityInterface $entity
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The content entity.
    *
    * @return int

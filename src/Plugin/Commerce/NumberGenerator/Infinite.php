@@ -2,8 +2,6 @@
 
 namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberGenerator;
 
-use Drupal\Core\Annotation\Translation;
-
 /**
  * Provides an infinite number generator.
  *

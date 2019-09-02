@@ -29,4 +29,5 @@ class NumberPatternListBuilder extends ConfigEntityListBuilder {
     $row['type'] = $entity->getType();
     return $row + parent::buildRow($entity);
   }
+
 }

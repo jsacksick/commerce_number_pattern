@@ -30,7 +30,7 @@ final class Sequence {
 
   /**
    * Constructs a new Sequence object.
-   v
+   *
    * @param array $definition
    *   The definition.
    */

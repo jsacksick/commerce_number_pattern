@@ -21,7 +21,7 @@ interface SupportsResettingSequencesInterface extends SupportsSequenceInterface 
   public function shouldReset(Sequence $last_sequence);
 
   /**
-   * Resets the sequence
+   * Resets the sequence.
    */
   public function resetSequence();
 

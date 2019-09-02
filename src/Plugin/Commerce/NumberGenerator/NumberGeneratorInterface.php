@@ -26,7 +26,7 @@ interface NumberGeneratorInterface extends ConfigurableInterface {
   /**
    * Generates a number for the given content entity.
    *
-   * @param \Drupal\Core\Entity\ContentEntityInterface
+   * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The content entity interface to generate a number for.
    *
    * @return string

@@ -11,6 +11,7 @@ interface NumberPatternInterface extends ConfigEntityInterface, EntityWithPlugin
    * Gets the number pattern type (e.g commerce_order).
    *
    * @return string
+   *   The number pattern type.
    */
   public function getType();
 
