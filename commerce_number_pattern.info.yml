@@ -1,6 +1,6 @@
-name: Commerce number pattern
+name: Commerce Number Pattern
 type: module
-description: 'Provides a config entity for generating configurable number patterns for orders/invoices.'
+description: 'Provides configurable patterns for generating sequential numbers.'
 package: Commerce
 core: 8.x
 dependencies:
