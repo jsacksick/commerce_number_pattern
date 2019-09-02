@@ -42,8 +42,8 @@ class InfiniteTest extends NumberGeneratorTestBase {
       '_entity_id' => 'test',
       'padding' => 0,
       'pattern' => 'INV-{sequence}',
-      'perStoreSequence' => TRUE,
-      'initialSequence' => 1000,
+      'per_store_sequence' => TRUE,
+      'initial_sequence' => 1000,
     ]);
     $this->assertEquals('INV-1000', $number_generator->generate($this->entity));
     $this->assertEquals('INV-1001', $number_generator->generate($this->entity));
@@ -65,7 +65,7 @@ class InfiniteTest extends NumberGeneratorTestBase {
     // Test the padding.
     $configuration = $number_generator->getConfiguration();
     $configuration['padding'] = 4;
-    $configuration['initialSequence'] = 1;
+    $configuration['initial_sequence'] = 1;
     $number_generator->setConfiguration($configuration);
     $number_generator->resetSequence();
     $this->assertEquals('INV-2-0001', $number_generator->generate($this->entity));

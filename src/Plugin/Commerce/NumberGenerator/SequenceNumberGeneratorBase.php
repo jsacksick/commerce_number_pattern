@@ -18,8 +18,8 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
   public function defaultConfiguration() {
     return [
       'pattern' => '{sequence}',
-      'perStoreSequence' => TRUE,
-      'initialSequence' => 1,
+      'per_store_sequence' => TRUE,
+      'initial_sequence' => 1,
     ] + parent::defaultConfiguration();
   }
 
@@ -42,7 +42,7 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
   public function getInitialSequence(ContentEntityInterface $entity) {
     return new Sequence([
       'generated' => $this->time->getCurrentTime(),
-      'sequence' => $this->configuration['initialSequence'],
+      'sequence' => $this->configuration['initial_sequence'],
       'store_id' => $this->getStoreId($entity),
     ]);
   }
@@ -134,7 +134,7 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
   protected function getStoreId(ContentEntityInterface $entity) {
     $store_id = 0;
 
-    if (!empty($this->configuration['perStoreSequence']) && $entity instanceof EntityStoreInterface) {
+    if (!empty($this->configuration['per_store_sequence']) && $entity instanceof EntityStoreInterface) {
       $store_id = $entity->getStoreId();
     }
 
@@ -146,11 +146,11 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
-    $form['initialSequence'] = [
+    $form['initial_sequence'] = [
       '#type' => 'number',
       '#title' => $this->t('Initial sequence'),
       '#description' => $this->t('Overrides the initial sequence (Defaults to 1).'),
-      '#default_value' => $this->configuration['initialSequence'],
+      '#default_value' => $this->configuration['initial_sequence'],
       '#min' => 1,
     ];
     $entity_type_id = $form_state->getValue('type');
@@ -161,11 +161,11 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
       // The per store sequence setting should only appear for entity type
       // that implements \Drupal\commerce_store\Entity\EntityStoreInterface.
       if ($entity_type->entityClassImplements(EntityStoreInterface::class)) {
-        $form['perStoreSequence'] = [
+        $form['per_store_sequence'] = [
           '#type' => 'checkbox',
           '#title' => $this->t('Generate a unique sequence for each store'),
           '#description' => $this->t('Ensures that numbers are not shared between stores.'),
-          '#default_value' => $this->configuration['perStoreSequence'],
+          '#default_value' => $this->configuration['per_store_sequence'],
         ];
       }
     }
@@ -190,9 +190,9 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
     parent::submitConfigurationForm($form, $form_state);
     if (!$form_state->getErrors()) {
       $values = $form_state->getValue($form['#parents']);
-      $this->configuration['initialSequence'] = $values['initialSequence'];
-      if (isset($values['perStoreSequence'])) {
-        $this->configuration['perStoreSequence'] = $values['perStoreSequence'];
+      $this->configuration['initial_sequence'] = $values['initial_sequence'];
+      if (isset($values['per_store_sequence'])) {
+        $this->configuration['per_store_sequence'] = $values['per_store_sequence'];
       }
     }
   }

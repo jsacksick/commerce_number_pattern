@@ -45,9 +45,9 @@ commerce_number_generator_with_sequence:
     padding:
       type: integer
       label: 'Padding'
-    initialSequence:
+    initial_sequence:
       type: integer
       label: 'Initial sequence'
-    perStoreSequence:
+    per_store_sequence:
       type: boolean
       label: 'Per store sequence'

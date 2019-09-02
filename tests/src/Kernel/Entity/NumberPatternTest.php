@@ -27,9 +27,9 @@ class NumberPatternTest extends NumberPatternKernelTestBase {
       'type' => 'entity_test_with_store',
       'plugin' => 'monthly',
       'configuration' => [
-        'initialSequence' => 100,
+        'initial_sequence' => 100,
         'pattern' => '[current-date:custom:Y-m]-{number}',
-        'perStoreSequence' => TRUE,
+        'per_store_sequence' => TRUE,
         'padding' => 0,
       ],
     ];

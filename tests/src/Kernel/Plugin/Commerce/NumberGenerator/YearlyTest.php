@@ -35,7 +35,7 @@ class YearlyTest extends NumberGeneratorTestBase {
   public function testGenerate() {
     $number_generator = $this->numberGeneratorManager->createInstance('yearly', [
       '_entity_id' => 'test',
-      'perStoreSequence' => FALSE,
+      'per_store_sequence' => FALSE,
     ]);
     $current_year = date('Y');
     $this->assertEquals($current_year . '-1', $number_generator->generate($this->entity));
