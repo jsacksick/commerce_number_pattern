@@ -4,6 +4,5 @@ description: 'Provides configurable patterns for generating sequential numbers.'
 package: Commerce
 core: 8.x
 dependencies:
+  - commerce:commerce
   - commerce:commerce_store
-  - entity:entity
-  - token:token
