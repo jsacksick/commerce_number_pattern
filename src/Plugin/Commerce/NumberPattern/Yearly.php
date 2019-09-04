@@ -1,19 +1,19 @@
 <?php
 
-namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberGenerator;
+namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern;
 
 use Drupal\commerce_number_pattern\Sequence;
 use Drupal\Core\Datetime\DrupalDateTime;
 
 /**
- * Provides a yearly number generator.
+ * Provides a yearly number pattern.
  *
- * @CommerceNumberGenerator(
+ * @CommerceNumberPattern(
  *   id = "yearly",
  *   label = @Translation("Yearly (Reset every year)"),
  * )
  */
-class Yearly extends SequenceNumberGeneratorBase {
+class Yearly extends SequentialNumberPatternBase {
 
   /**
    * {@inheritdoc}

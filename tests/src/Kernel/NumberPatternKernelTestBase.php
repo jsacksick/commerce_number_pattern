@@ -14,6 +14,13 @@ abstract class NumberPatternKernelTestBase extends CommerceKernelTestBase {
   use NumberPatternTestTrait;
 
   /**
+   * The number pattern plugin manager.
+   *
+   * @var \Drupal\commerce_number_pattern\NumberPatternManager
+   */
+  protected $pluginManager;
+
+  /**
    * Modules to enable.
    *
    * @var array
@@ -31,10 +38,11 @@ abstract class NumberPatternKernelTestBase extends CommerceKernelTestBase {
   protected function setUp() {
     parent::setUp();
 
-    // Tests are crashing without the following line.
     $this->installConfig(['system']);
     $this->installSchema('commerce_number_pattern', ['commerce_number_pattern_sequence']);
     $this->installEntitySchema('entity_test_with_store');
+
+    $this->pluginManager = $this->container->get('plugin.manager.commerce_number_pattern');
   }
 
   /**

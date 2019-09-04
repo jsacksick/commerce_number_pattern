@@ -94,7 +94,7 @@ class NumberPattern extends ConfigEntityBase implements NumberPatternInterface {
   protected $configuration = [];
 
   /**
-   * The plugin collection that holds the number generator plugin.
+   * The plugin collection that holds the number pattern plugin.
    *
    * @var \Drupal\commerce\CommerceSinglePluginCollection
    */
@@ -173,7 +173,7 @@ class NumberPattern extends ConfigEntityBase implements NumberPatternInterface {
   }
 
   /**
-   * Gets the plugin collection that holds the number generator plugin.
+   * Gets the plugin collection that holds the number pattern plugin.
    *
    * Ensures the plugin collection is initialized before returning it.
    *
@@ -182,7 +182,7 @@ class NumberPattern extends ConfigEntityBase implements NumberPatternInterface {
    */
   protected function getPluginCollection() {
     if (!$this->pluginCollection) {
-      $plugin_manager = \Drupal::service('plugin.manager.commerce_number_generator');
+      $plugin_manager = \Drupal::service('plugin.manager.commerce_number_pattern');
       $this->pluginCollection = new CommerceSinglePluginCollection($plugin_manager, $this->plugin, $this->configuration, $this->id);
     }
     return $this->pluginCollection;

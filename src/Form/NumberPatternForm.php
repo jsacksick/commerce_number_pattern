@@ -2,7 +2,7 @@
 
 namespace Drupal\commerce_number_pattern\Form;
 
-use Drupal\commerce_number_pattern\NumberGeneratorManager;
+use Drupal\commerce_number_pattern\NumberPatternManager;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityForm;
@@ -25,7 +25,7 @@ class NumberPatternForm extends EntityForm {
   /**
    * The number pattern plugin manager.
    *
-   * @var \Drupal\commerce_number_pattern\NumberGeneratorManager
+   * @var \Drupal\commerce_number_pattern\NumberPatternManager
    */
   protected $pluginManager;
 
@@ -34,10 +34,10 @@ class NumberPatternForm extends EntityForm {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\commerce_number_pattern\NumberGeneratorManager $plugin_manager
-   *   The number generator plugin manager.
+   * @param \Drupal\commerce_number_pattern\NumberPatternManager $plugin_manager
+   *   The number pattern plugin manager.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, NumberGeneratorManager $plugin_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, NumberPatternManager $plugin_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->pluginManager = $plugin_manager;
   }
@@ -48,7 +48,7 @@ class NumberPatternForm extends EntityForm {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('entity_type.manager'),
-      $container->get('plugin.manager.commerce_number_generator')
+      $container->get('plugin.manager.commerce_number_pattern')
     );
   }
 
@@ -134,7 +134,7 @@ class NumberPatternForm extends EntityForm {
     ];
     $form['configuration'] = [
       '#type' => 'commerce_plugin_configuration',
-      '#plugin_type' => 'commerce_number_generator',
+      '#plugin_type' => 'commerce_number_pattern',
       '#plugin_id' => $plugin,
       '#default_value' => $plugin_configuration,
       "#entity_type" => $type,

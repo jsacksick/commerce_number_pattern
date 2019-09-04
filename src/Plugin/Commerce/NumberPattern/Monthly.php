@@ -1,19 +1,19 @@
 <?php
 
-namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberGenerator;
+namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern;
 
 use Drupal\commerce_number_pattern\Sequence;
 use Drupal\Core\Datetime\DrupalDateTime;
 
 /**
- * Provides a monthly number generator.
+ * Provides the monthly number pattern.
  *
- * @CommerceNumberGenerator(
+ * @CommerceNumberPattern(
  *   id = "monthly",
  *   label = @Translation("Monthly (Reset every month)"),
  * )
  */
-class Monthly extends SequenceNumberGeneratorBase {
+class Monthly extends SequentialNumberPatternBase {
 
   /**
    * {@inheritdoc}

@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\commerce_number_pattern\Kernel\Entity;
 
-use Drupal\commerce_number_pattern\Plugin\Commerce\NumberGenerator\NumberGeneratorInterface;
+use Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern\NumberPatternInterface;
 use Drupal\Tests\commerce_number_pattern\Kernel\NumberPatternKernelTestBase;
 
 /**
@@ -38,10 +38,10 @@ class NumberPatternTest extends NumberPatternKernelTestBase {
     $this->assertEquals('Test label', $number_pattern->label());
     $this->assertEquals($values['type'], $number_pattern->getType());
 
-    $number_generator = $number_pattern->getPlugin();
-    $this->assertInstanceOf(NumberGeneratorInterface::class, $number_generator);
-    $this->assertEquals('monthly', $number_generator->getPluginId());
-    $this->assertEquals($number_pattern->getPluginConfiguration(), $number_generator->getConfiguration());
+    $number_pattern_plugin = $number_pattern->getPlugin();
+    $this->assertInstanceOf(NumberPatternInterface::class, $number_pattern_plugin);
+    $this->assertEquals('monthly', $number_pattern_plugin->getPluginId());
+    $this->assertEquals($number_pattern->getPluginConfiguration(), $number_pattern_plugin->getConfiguration());
     $number_pattern->setPluginConfiguration([
       'pattern' => 'INV-[current-date:custom:Y-m]-{number}',
       'padding' => 5,

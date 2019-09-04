@@ -2,22 +2,22 @@
 
 namespace Drupal\commerce_number_pattern;
 
-use Drupal\commerce_number_pattern\Annotation\CommerceNumberGenerator;
-use Drupal\commerce_number_pattern\Plugin\Commerce\NumberGenerator\NumberGeneratorInterface;
+use Drupal\commerce_number_pattern\Annotation\CommerceNumberPattern;
+use Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern\NumberPatternInterface;
 use Drupal\Core\Cache\CacheBackendInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 
 /**
- * Manages discovery and instantiation of number generator plugins.
+ * Manages discovery and instantiation of number pattern plugins.
  *
- * @see \Drupal\commerce_number_pattern\Annotation\CommerceNumberGenerator
+ * @see \Drupal\commerce_number_pattern\Annotation\CommerceNumberPattern
  * @see plugin_api
  */
-class NumberGeneratorManager extends DefaultPluginManager {
+class NumberPatternManager extends DefaultPluginManager {
 
   /**
-   * Constructs a new NumberGeneratorManager object.
+   * Constructs a new NumberPatternManager object.
    *
    * @param \Traversable $namespaces
    *   An object that implements \Traversable which contains the root paths
@@ -29,11 +29,11 @@ class NumberGeneratorManager extends DefaultPluginManager {
    */
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
     parent::__construct(
-      'Plugin/Commerce/NumberGenerator', $namespaces, $module_handler, NumberGeneratorInterface::class, CommerceNumberGenerator::class
+      'Plugin/Commerce/NumberPattern', $namespaces, $module_handler, NumberPatternInterface::class, CommerceNumberPattern::class
     );
 
-    $this->alterInfo('commerce_number_generator_info');
-    $this->setCacheBackend($cache_backend, 'commerce_number_generator_plugins');
+    $this->alterInfo('commerce_number_pattern_info');
+    $this->setCacheBackend($cache_backend, 'commerce_number_pattern_plugins');
   }
 
 }

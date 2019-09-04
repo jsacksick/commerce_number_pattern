@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberGenerator;
+namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern;
 
 use Drupal\commerce_number_pattern\Sequence;
 use Drupal\commerce_store\Entity\EntityStoreInterface;
@@ -8,9 +8,9 @@ use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Provides a base class for number generator plugins which support sequences.
+ * Provides a base class for number pattern plugins which support sequences.
  */
-abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implements SupportsSequenceInterface {
+abstract class SequentialNumberPatternBase extends NumberPatternBase implements SupportsSequenceInterface {
 
   /**
    * {@inheritdoc}
@@ -73,7 +73,7 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
    * {@inheritdoc}
    */
   public function getNextSequence(ContentEntityInterface $entity) {
-    $lock_name = "commerce_number_pattern.number_generator.{$this->entityId}";
+    $lock_name = "commerce_number_pattern.plugin.{$this->entityId}";
     while (!$this->lock->acquire($lock_name)) {
       $this->lock->wait($lock_name);
     }

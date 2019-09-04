@@ -5,15 +5,15 @@ namespace Drupal\commerce_number_pattern\Annotation;
 use Drupal\Component\Annotation\Plugin;
 
 /**
- * Defines the number generator plugin annotation object.
+ * Defines the number pattern plugin annotation object.
  *
- * Plugin namespace: Plugin\Commerce\NumberGenerator.
+ * Plugin namespace: Plugin\Commerce\NumberPattern.
  *
  * @see plugin_api
  *
  * @Annotation
  */
-class CommerceNumberGenerator extends Plugin {
+class CommerceNumberPattern extends Plugin {
 
   /**
    * The plugin ID.

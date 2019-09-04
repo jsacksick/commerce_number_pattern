@@ -13,11 +13,23 @@ commerce_number_pattern.commerce_number_pattern.*:
       label: 'Pattern type'
     plugin:
       type: string
-      label: 'Number generator plugin'
+      label: 'Plugin'
     configuration:
-      type: commerce_number_pattern.commerce_number_generator.plugin.[%parent.plugin]
+      type: commerce_number_pattern.commerce_number_pattern.plugin.[%parent.plugin]
 
-commerce_number_pattern.commerce_number_generator.plugin.*:
+commerce_number_pattern.commerce_number_pattern.plugin.*:
+  type: commerce_number_pattern_plugin_configuration
+
+commerce_number_pattern.commerce_number_pattern.plugin.infinite:
+  type: commerce_number_pattern_sequential_plugin_configuration
+
+commerce_number_pattern.commerce_number_pattern.plugin.monthly:
+  type: commerce_number_pattern_sequential_plugin_configuration
+
+commerce_number_pattern.commerce_number_pattern.plugin.yearly:
+  type: commerce_number_pattern_sequential_plugin_configuration
+
+commerce_number_pattern_plugin_configuration:
   type: mapping
   mapping:
     pattern:
@@ -27,24 +39,9 @@ commerce_number_pattern.commerce_number_generator.plugin.*:
       type: integer
       label: 'Padding'
 
-commerce_number_pattern.commerce_number_generator.plugin.infinite:
-  type: commerce_number_generator_with_sequence
-
-commerce_number_pattern.commerce_number_generator.plugin.monthly:
-  type: commerce_number_generator_with_sequence
-
-commerce_number_pattern.commerce_number_generator.plugin.yearly:
-  type: commerce_number_generator_with_sequence
-
-commerce_number_generator_with_sequence:
-  type: mapping
+commerce_number_pattern_sequential_plugin_configuration:
+  type: commerce_number_pattern_plugin_configuration
   mapping:
-    pattern:
-      type: string
-      label: 'Pattern'
-    padding:
-      type: integer
-      label: 'Padding'
     initial_sequence:
       type: integer
       label: 'Initial sequence'

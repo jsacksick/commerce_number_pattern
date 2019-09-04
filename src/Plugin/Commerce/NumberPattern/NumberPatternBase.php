@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberGenerator;
+namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern;
 
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\NestedArray;
@@ -15,9 +15,9 @@ use Drupal\Core\Utility\Token;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provides a base class for number generator plugins.
+ * Provides a base class for number pattern plugins.
  */
-abstract class NumberGeneratorBase extends PluginBase implements NumberGeneratorInterface, ContainerFactoryPluginInterface {
+abstract class NumberPatternBase extends PluginBase implements NumberPatternInterface, ContainerFactoryPluginInterface {
 
   /**
    * The database connection.
@@ -64,7 +64,7 @@ abstract class NumberGeneratorBase extends PluginBase implements NumberGenerator
   protected $token;
 
   /**
-   * Constructs a new NumberGeneratorBase object.
+   * Constructs a new NumberPatternBase object.
    *
    * @param array $configuration
    *   A configuration array containing information about the plugin instance.

@@ -1,10 +1,10 @@
 <?php
 
-namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberGenerator;
+namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 
-interface SupportsSequenceInterface extends NumberGeneratorInterface {
+interface SupportsSequenceInterface extends NumberPatternInterface {
 
   /**
    * Gets the initial sequence.

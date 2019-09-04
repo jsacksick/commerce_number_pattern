@@ -16,44 +16,44 @@ interface NumberPatternInterface extends ConfigEntityInterface, EntityWithPlugin
   public function getType();
 
   /**
-   * Gets the number generator plugin.
+   * Gets the number pattern plugin.
    *
-   * @return \Drupal\commerce_number_pattern\Plugin\Commerce\NumberGenerator\NumberGeneratorInterface
-   *   The number generator plugin.
+   * @return \Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern\NumberPatternInterface
+   *   The number pattern plugin.
    */
   public function getPlugin();
 
   /**
-   * Gets the number generator plugin ID.
+   * Gets the number pattern plugin ID.
    *
    * @return string
-   *   The number generator plugin ID.
+   *   The number pattern plugin ID.
    */
   public function getPluginId();
 
   /**
-   * Sets the number generator plugin ID.
+   * Sets the number pattern plugin ID.
    *
    * @param string $plugin_id
-   *   The number generator plugin ID.
+   *   The number pattern plugin ID.
    *
    * @return $this
    */
   public function setPluginId($plugin_id);
 
   /**
-   * Gets the number generator plugin configuration.
+   * Gets the number pattern plugin configuration.
    *
    * @return array
-   *   The number generator plugin configuration.
+   *   The number pattern plugin configuration.
    */
   public function getPluginConfiguration();
 
   /**
-   * Sets the number generator plugin configuration.
+   * Sets the number pattern plugin configuration.
    *
    * @param array $configuration
-   *   The number generator plugin configuration.
+   *   The number pattern plugin configuration.
    *
    * @return $this
    */
