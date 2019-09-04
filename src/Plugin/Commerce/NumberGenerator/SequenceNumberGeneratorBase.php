@@ -10,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Provides a base class for number generator plugins which support sequences.
  */
-abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implements SupportsResettingSequencesInterface {
+abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implements SupportsSequenceInterface {
 
   /**
    * {@inheritdoc}

@@ -39,4 +39,9 @@ interface SupportsSequenceInterface extends NumberGeneratorInterface {
    */
   public function getNextSequence(ContentEntityInterface $entity);
 
+  /**
+   * Resets the sequence.
+   */
+  public function resetSequence();
+
 }

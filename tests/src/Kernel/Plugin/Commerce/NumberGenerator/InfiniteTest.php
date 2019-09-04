@@ -20,7 +20,6 @@ class InfiniteTest extends NumberGeneratorTestBase {
    * @covers ::resetSequence
    */
   public function testGenerate() {
-    /** @var \Drupal\commerce_number_pattern\Plugin\Commerce\NumberGenerator\SupportsResettingSequencesInterface $number_generator */
     $number_generator = $this->numberGeneratorManager->createInstance('infinite', [
       '_entity_id' => 'test',
       'padding' => 0,
