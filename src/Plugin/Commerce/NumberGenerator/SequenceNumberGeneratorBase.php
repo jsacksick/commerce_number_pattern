@@ -116,9 +116,15 @@ abstract class SequenceNumberGeneratorBase extends NumberGeneratorBase implement
   }
 
   /**
-   * {@inheritdoc}
+   * Gets whether the sequence should reset.
+   *
+   * @param \Drupal\commerce_number_pattern\Sequence $last_sequence
+   *   The last sequence.
+   *
+   * @return bool
+   *   Whether the sequence should reset.
    */
-  public function shouldReset(Sequence $last_sequence) {
+  protected function shouldReset(Sequence $last_sequence) {
     return FALSE;
   }
 

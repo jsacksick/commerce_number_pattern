@@ -27,7 +27,7 @@ class Yearly extends SequenceNumberGeneratorBase {
   /**
    * {@inheritdoc}
    */
-  public function shouldReset(Sequence $last_sequence) {
+  protected function shouldReset(Sequence $last_sequence) {
     $current_time = DrupalDateTime::createFromTimestamp($this->time->getCurrentTime());
     $generated_time = DrupalDateTime::createFromTimestamp($last_sequence->getGeneratedTime());
     // The sequence should be reset if the current year doesn't match the year

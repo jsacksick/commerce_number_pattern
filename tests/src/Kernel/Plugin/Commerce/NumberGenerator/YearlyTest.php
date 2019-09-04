@@ -2,8 +2,6 @@
 
 namespace Drupal\Tests\commerce_number_pattern\Kernel\Plugin\Commerce\NumberGenerator;
 
-use Drupal\commerce_number_pattern\Sequence;
-
 /**
  * Tests the yearly number generator.
  *
@@ -11,23 +9,6 @@ use Drupal\commerce_number_pattern\Sequence;
  * @group commerce_number_pattern
  */
 class YearlyTest extends NumberGeneratorTestBase {
-
-  /**
-   * @covers ::shouldReset
-   */
-  public function testReset() {
-    $number_generator = $this->numberGeneratorManager->createInstance('yearly');
-    $definition = [
-      'store_id' => $this->store->id(),
-      'generated' => strtotime('today'),
-      'sequence' => 10,
-    ];
-    $last_sequence = new Sequence($definition);
-    $this->assertFalse($number_generator->shouldReset($last_sequence));
-    $this->rewindTime(strtotime('+2 years'));
-    $number_generator = $this->numberGeneratorManager->createInstance('yearly');
-    $this->assertTrue($number_generator->shouldReset($last_sequence));
-  }
 
   /**
    * @covers ::generate
@@ -44,6 +25,15 @@ class YearlyTest extends NumberGeneratorTestBase {
     $this->entity->setStoreId($this->store2);
     $this->entity->save();
     $this->assertEquals($current_year . '-3', $number_generator->generate($this->entity));
+
+    // Confirm that the sequence resets after a year.
+    $this->rewindTime(strtotime('+1 years'));
+    $next_year = $current_year + 1;
+    $number_generator = $this->numberGeneratorManager->createInstance('yearly', [
+      '_entity_id' => 'test',
+      'per_store_sequence' => FALSE,
+    ]);
+    $this->assertEquals($next_year . '-1', $number_generator->generate($this->entity));
   }
 
 }

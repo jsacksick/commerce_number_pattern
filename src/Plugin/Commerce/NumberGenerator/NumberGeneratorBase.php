@@ -116,20 +116,6 @@ abstract class NumberGeneratorBase extends PluginBase implements NumberGenerator
   /**
    * {@inheritdoc}
    */
-  public function getPattern() {
-    return $this->configuration['pattern'];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getPadding() {
-    return $this->configuration['padding'];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function generate(ContentEntityInterface $entity) {
     return $this->token->replace($this->configuration['pattern'], [$entity->getEntityTypeId() => $entity]);
   }

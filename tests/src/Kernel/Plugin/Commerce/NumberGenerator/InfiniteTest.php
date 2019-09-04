@@ -13,23 +13,6 @@ use Drupal\commerce_number_pattern\Sequence;
 class InfiniteTest extends NumberGeneratorTestBase {
 
   /**
-   * @covers ::shouldReset
-   */
-  public function testReset() {
-    $number_generator = $this->numberGeneratorManager->createInstance('infinite');
-    $definition = [
-      'store_id' => $this->store->id(),
-      'generated' => strtotime('today'),
-      'sequence' => 10,
-    ];
-    $last_sequence = new Sequence($definition);
-    $this->assertFalse($number_generator->shouldReset($last_sequence));
-    $definition['generated'] = strtotime('-35 days');
-    $last_sequence = new Sequence($definition);
-    $this->assertFalse($number_generator->shouldReset($last_sequence));
-  }
-
-  /**
    * @covers ::generate
    * @covers ::getInitialSequence
    * @covers ::getLastSequence

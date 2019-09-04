@@ -8,22 +8,6 @@ use Drupal\Core\Entity\ContentEntityInterface;
 interface NumberGeneratorInterface extends ConfigurableInterface {
 
   /**
-   * Gets the number generator pattern.
-   *
-   * @return string
-   *   The number generator pattern.
-   */
-  public function getPattern();
-
-  /**
-   * Gets the number generator padding.
-   *
-   * @return int
-   *   The number generator padding.
-   */
-  public function getPadding();
-
-  /**
    * Generates a number for the given content entity.
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
