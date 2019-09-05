@@ -4,13 +4,92 @@ namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern;
 
 use Drupal\commerce_number_pattern\Sequence;
 use Drupal\commerce_store\Entity\EntityStoreInterface;
+use Drupal\Component\Datetime\TimeInterface;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Lock\LockBackendInterface;
+use Drupal\Core\Utility\Token;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides a base class for number pattern plugins which support sequences.
  */
 abstract class SequentialNumberPatternBase extends NumberPatternBase implements SupportsSequenceInterface {
+
+  /**
+   * The database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $connection;
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
+
+  /**
+   * The lock backend.
+   *
+   * @var \Drupal\Core\Lock\LockBackendInterface
+   */
+  protected $lock;
+
+  /**
+   * The time.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface
+   */
+  protected $time;
+
+  /**
+   * Constructs a new SequentialNumberPatternBase object.
+   *
+   * @param array $configuration
+   *   A configuration array containing information about the plugin instance.
+   * @param string $plugin_id
+   *   The plugin_id for the plugin instance.
+   * @param mixed $plugin_definition
+   *   The plugin implementation definition.
+   * @param \Drupal\Core\Database\Connection $connection
+   *   The database connection.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\Core\Lock\LockBackendInterface $lock
+   *   The lock backend.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time.
+   * @param \Drupal\Core\Utility\Token $token
+   *   The token service.
+   */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $connection, EntityTypeManagerInterface $entity_type_manager, LockBackendInterface $lock, TimeInterface $time, Token $token) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition, $token);
+
+    $this->connection = $connection;
+    $this->entityTypeManager = $entity_type_manager;
+    $this->lock = $lock;
+    $this->time = $time;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    return new static(
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('database'),
+      $container->get('entity_type.manager'),
+      $container->get('lock'),
+      $container->get('datetime.time'),
+      $container->get('token')
+    );
+  }
 
   /**
    * {@inheritdoc}

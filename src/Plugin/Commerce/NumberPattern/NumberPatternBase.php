@@ -2,13 +2,9 @@
 
 namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern;
 
-use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\ContentEntityInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Lock\LockBackendInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\Core\Utility\Token;
@@ -20,13 +16,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class NumberPatternBase extends PluginBase implements NumberPatternInterface, ContainerFactoryPluginInterface {
 
   /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $connection;
-
-  /**
    * The ID of the parent config entity.
    *
    * Not available while the plugin is being configured.
@@ -34,27 +23,6 @@ abstract class NumberPatternBase extends PluginBase implements NumberPatternInte
    * @var string
    */
   protected $entityId;
-
-  /**
-   * The entity type manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   */
-  protected $entityTypeManager;
-
-  /**
-   * The lock backend.
-   *
-   * @var \Drupal\Core\Lock\LockBackendInterface
-   */
-  protected $lock;
-
-  /**
-   * The time.
-   *
-   * @var \Drupal\Component\Datetime\TimeInterface
-   */
-  protected $time;
 
   /**
    * The token service.
@@ -72,27 +40,16 @@ abstract class NumberPatternBase extends PluginBase implements NumberPatternInte
    *   The plugin_id for the plugin instance.
    * @param mixed $plugin_definition
    *   The plugin implementation definition.
-   * @param \Drupal\Core\Database\Connection $connection
-   *   The database connection.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
-   * @param \Drupal\Core\Lock\LockBackendInterface $lock
-   *   The lock backend.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time.
    * @param \Drupal\Core\Utility\Token $token
    *   The token service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, Connection $connection, EntityTypeManagerInterface $entity_type_manager, LockBackendInterface $lock, TimeInterface $time, Token $token) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, Token $token) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->connection = $connection;
+
     if (array_key_exists('_entity_id', $configuration)) {
       $this->entityId = $configuration['_entity_id'];
       unset($configuration['_entity_id']);
     }
-    $this->entityTypeManager = $entity_type_manager;
-    $this->lock = $lock;
-    $this->time = $time;
     $this->token = $token;
     $this->setConfiguration($configuration);
   }
@@ -105,10 +62,6 @@ abstract class NumberPatternBase extends PluginBase implements NumberPatternInte
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('database'),
-      $container->get('entity_type.manager'),
-      $container->get('lock'),
-      $container->get('datetime.time'),
       $container->get('token')
     );
   }
