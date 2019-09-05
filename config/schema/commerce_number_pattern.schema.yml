@@ -35,16 +35,16 @@ commerce_number_pattern_plugin_configuration:
     pattern:
       type: string
       label: 'Pattern'
-    padding:
-      type: integer
-      label: 'Padding'
 
 commerce_number_pattern_sequential_plugin_configuration:
   type: commerce_number_pattern_plugin_configuration
   mapping:
+    per_store_sequence:
+      type: boolean
+      label: 'Generate a unique sequence for each store'
     initial_sequence:
       type: integer
       label: 'Initial sequence'
-    per_store_sequence:
-      type: boolean
-      label: 'Per store sequence'
+    padding:
+      type: integer
+      label: 'Padding'

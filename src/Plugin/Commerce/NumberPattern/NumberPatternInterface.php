@@ -9,7 +9,7 @@ use Drupal\Core\Entity\ContentEntityInterface;
 /**
  * Defines the interface for number patterns.
  *
- * @see \Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern\SupportsSequenceInterface
+ * @see \Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern\SequentialNumberPatternInterface
  */
 interface NumberPatternInterface extends ConfigurableInterface, PluginInspectionInterface {
 

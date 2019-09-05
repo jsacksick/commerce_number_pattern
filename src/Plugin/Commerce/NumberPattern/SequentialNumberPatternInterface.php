@@ -4,10 +4,13 @@ namespace Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern;
 
 use Drupal\Core\Entity\ContentEntityInterface;
 
-interface SupportsSequenceInterface extends NumberPatternInterface {
+/**
+ * Defines the interface for number pattern which support sequences.
+ */
+interface SequentialNumberPatternInterface extends NumberPatternInterface {
 
   /**
-   * Gets the initial sequence.
+   * Gets the initial sequence for the given entity.
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The entity.
@@ -18,18 +21,18 @@ interface SupportsSequenceInterface extends NumberPatternInterface {
   public function getInitialSequence(ContentEntityInterface $entity);
 
   /**
-   * Gets the last sequence.
+   * Gets the current sequence for the given entity.
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The entity.
    *
    * @return \Drupal\commerce_number_pattern\Sequence|null
-   *   The last sequence, or NULL if no sequence was found in DB.
+   *   The current sequence, or NULL if none found.
    */
-  public function getLastSequence(ContentEntityInterface $entity);
+  public function getCurrentSequence(ContentEntityInterface $entity);
 
   /**
-   * Gets the next sequence.
+   * Gets the next sequence for the given entity.
    *
    * @param \Drupal\Core\Entity\ContentEntityInterface $entity
    *   The entity.

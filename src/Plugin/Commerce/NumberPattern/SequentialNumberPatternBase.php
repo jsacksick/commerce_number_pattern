@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides a base class for number pattern plugins which support sequences.
  */
-abstract class SequentialNumberPatternBase extends NumberPatternBase implements SupportsSequenceInterface {
+abstract class SequentialNumberPatternBase extends NumberPatternBase implements SequentialNumberPatternInterface {
 
   /**
    * The database connection.
@@ -99,7 +99,71 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
       'pattern' => '{sequence}',
       'per_store_sequence' => TRUE,
       'initial_sequence' => 1,
+      'padding' => 0,
     ] + parent::defaultConfiguration();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+    $form = parent::buildConfigurationForm($form, $form_state);
+
+    $entity_type_id = $form_state->getValue('type');
+    if (!empty($entity_type_id)) {
+      $entity_type = $this->entityTypeManager->getDefinition($entity_type_id);
+      if ($entity_type->entityClassImplements(EntityStoreInterface::class)) {
+        $form['per_store_sequence'] = [
+          '#type' => 'checkbox',
+          '#title' => $this->t('Generate a unique sequence for each store'),
+          '#description' => $this->t('Ensures that numbers are not shared between stores.'),
+          '#default_value' => $this->configuration['per_store_sequence'],
+        ];
+      }
+    }
+    $form['initial_sequence'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Initial sequence'),
+      '#default_value' => $this->configuration['initial_sequence'],
+      '#min' => 1,
+    ];
+    $form['padding'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Padding'),
+      '#description' => $this->t('Pad the number with leading zeroes. Example: a value of 6 will output 52 as 000052.'),
+      '#default_value' => $this->configuration['padding'],
+      '#min' => 0,
+    ];
+
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
+    parent::validateConfigurationForm($form, $form_state);
+
+    $values = $form_state->getValue($form['#parents']);
+    if (strpos($values['pattern'], '{sequence}') === FALSE) {
+      $form_state->setError($form['pattern'], $this->t('Missing the required placeholder {sequence}.'));
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
+    parent::submitConfigurationForm($form, $form_state);
+
+    if (!$form_state->getErrors()) {
+      $values = $form_state->getValue($form['#parents']);
+      if (isset($values['per_store_sequence'])) {
+        $this->configuration['per_store_sequence'] = $values['per_store_sequence'];
+      }
+      $this->configuration['initial_sequence'] = $values['initial_sequence'];
+      $this->configuration['padding'] = $values['padding'];
+    }
   }
 
   /**
@@ -111,8 +175,9 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
     if ($this->configuration['padding'] > 0) {
       $sequence = str_pad($sequence, $this->configuration['padding'], '0', STR_PAD_LEFT);
     }
-    $sequence = str_replace('{sequence}', $sequence, $this->configuration['pattern']);
-    return $this->token->replace($sequence, [$entity->getEntityTypeId() => $entity]);
+    $pattern = str_replace('{sequence}', $sequence, $this->configuration['pattern']);
+
+    return $this->token->replace($pattern, [$entity->getEntityTypeId() => $entity]);
   }
 
   /**
@@ -129,7 +194,7 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
   /**
    * {@inheritdoc}
    */
-  public function getLastSequence(ContentEntityInterface $entity) {
+  public function getCurrentSequence(ContentEntityInterface $entity) {
     $query = $this->connection->select('commerce_number_pattern_sequence', 'cnps');
     $query->fields('cnps', ['store_id', 'sequence', 'generated']);
     $query
@@ -156,15 +221,16 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
     while (!$this->lock->acquire($lock_name)) {
       $this->lock->wait($lock_name);
     }
-    $sequence = $this->getLastSequence($entity);
+
     $store_id = $this->getStoreId($entity);
-    if (!$sequence || $this->shouldReset($sequence)) {
+    $current_sequence = $this->getCurrentSequence($entity);
+    if (!$current_sequence || $this->shouldReset($current_sequence)) {
       $sequence = $this->getInitialSequence($entity);
     }
     else {
       $sequence = new Sequence([
         'generated' => $this->time->getCurrentTime(),
-        'sequence' => $sequence->getSequence() + 1,
+        'sequence' => $current_sequence->getSequence() + 1,
         'store_id' => $store_id,
       ]);
     }
@@ -195,17 +261,15 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
   }
 
   /**
-   * Gets whether the sequence should reset.
+   * Gets whether the sequence should be reset.
    *
-   * @param \Drupal\commerce_number_pattern\Sequence $last_sequence
-   *   The last sequence.
+   * @param \Drupal\commerce_number_pattern\Sequence $current_sequence
+   *   The current sequence.
    *
    * @return bool
-   *   Whether the sequence should reset.
+   *   TRUE if the sequence should be reset, FALSE otherwise.
    */
-  protected function shouldReset(Sequence $last_sequence) {
-    return FALSE;
-  }
+  abstract protected function shouldReset(Sequence $current_sequence);
 
   /**
    * Gets the store_id to use for the sequence.
@@ -218,68 +282,11 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
    */
   protected function getStoreId(ContentEntityInterface $entity) {
     $store_id = 0;
-
     if (!empty($this->configuration['per_store_sequence']) && $entity instanceof EntityStoreInterface) {
       $store_id = $entity->getStoreId();
     }
 
     return $store_id;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-    $form = parent::buildConfigurationForm($form, $form_state);
-    $form['initial_sequence'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Initial sequence'),
-      '#description' => $this->t('Overrides the initial sequence (Defaults to 1).'),
-      '#default_value' => $this->configuration['initial_sequence'],
-      '#min' => 1,
-    ];
-    $entity_type_id = $form_state->getValue('type');
-
-    if (!empty($entity_type_id)) {
-      $entity_type = $this->entityTypeManager->getDefinition($entity_type_id);
-
-      // The per store sequence setting should only appear for entity type
-      // that implements \Drupal\commerce_store\Entity\EntityStoreInterface.
-      if ($entity_type->entityClassImplements(EntityStoreInterface::class)) {
-        $form['per_store_sequence'] = [
-          '#type' => 'checkbox',
-          '#title' => $this->t('Generate a unique sequence for each store'),
-          '#description' => $this->t('Ensures that numbers are not shared between stores.'),
-          '#default_value' => $this->configuration['per_store_sequence'],
-        ];
-      }
-    }
-
-    return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $values = $form_state->getValue($form['#parents']);
-    if (strpos($values['pattern'], '{sequence}') === FALSE) {
-      $form_state->setError($form['pattern'], t('Missing the required placeholder {sequence}.'));
-    }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
-    parent::submitConfigurationForm($form, $form_state);
-    if (!$form_state->getErrors()) {
-      $values = $form_state->getValue($form['#parents']);
-      $this->configuration['initial_sequence'] = $values['initial_sequence'];
-      if (isset($values['per_store_sequence'])) {
-        $this->configuration['per_store_sequence'] = $values['per_store_sequence'];
-      }
-    }
   }
 
 }

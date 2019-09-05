@@ -16,7 +16,7 @@ class InfiniteTest extends NumberPatternKernelTestBase {
   /**
    * @covers ::generate
    * @covers ::getInitialSequence
-   * @covers ::getLastSequence
+   * @covers ::getCurrentSequence
    * @covers ::getNextSequence
    * @covers ::resetSequence
    */

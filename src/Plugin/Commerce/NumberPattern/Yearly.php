@@ -27,11 +27,11 @@ class Yearly extends SequentialNumberPatternBase {
   /**
    * {@inheritdoc}
    */
-  protected function shouldReset(Sequence $last_sequence) {
+  protected function shouldReset(Sequence $current_sequence) {
+    // Reset the sequence if the current one is from a previous year.
+    $generated_time = DrupalDateTime::createFromTimestamp($current_sequence->getGeneratedTime());
     $current_time = DrupalDateTime::createFromTimestamp($this->time->getCurrentTime());
-    $generated_time = DrupalDateTime::createFromTimestamp($last_sequence->getGeneratedTime());
-    // The sequence should be reset if the current year doesn't match the year
-    // the last sequential number was generated.
+
     return $generated_time->format('Y') != $current_time->format('Y');
   }
 

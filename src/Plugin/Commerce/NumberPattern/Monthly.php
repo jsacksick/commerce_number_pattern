@@ -27,18 +27,12 @@ class Monthly extends SequentialNumberPatternBase {
   /**
    * {@inheritdoc}
    */
-  protected function shouldReset(Sequence $last_sequence) {
+  protected function shouldReset(Sequence $current_sequence) {
+    // Reset the sequence if the current one is from a previous month.
+    $generated_time = DrupalDateTime::createFromTimestamp($current_sequence->getGeneratedTime());
     $current_time = DrupalDateTime::createFromTimestamp($this->time->getCurrentTime());
-    $generated_time = DrupalDateTime::createFromTimestamp($last_sequence->getGeneratedTime());
 
-    // The sequence should be reset if the last sequential number was not
-    // generated during the same month.
-    if (($generated_time->format('Y') != $current_time->format('Y')) ||
-      ($generated_time->format('m') != $current_time->format('m'))) {
-      return TRUE;
-    }
-
-    return FALSE;
+    return $generated_time->format('Y-m') != $current_time->format('Y-m');
   }
 
 }

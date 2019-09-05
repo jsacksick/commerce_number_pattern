@@ -16,6 +16,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class NumberPatternBase extends PluginBase implements NumberPatternInterface, ContainerFactoryPluginInterface {
 
   /**
+   * The token service.
+   *
+   * @var \Drupal\Core\Utility\Token
+   */
+  protected $token;
+
+  /**
    * The ID of the parent config entity.
    *
    * Not available while the plugin is being configured.
@@ -23,13 +30,6 @@ abstract class NumberPatternBase extends PluginBase implements NumberPatternInte
    * @var string
    */
   protected $entityId;
-
-  /**
-   * The token service.
-   *
-   * @var \Drupal\Core\Utility\Token
-   */
-  protected $token;
 
   /**
    * Constructs a new NumberPatternBase object.
@@ -46,11 +46,11 @@ abstract class NumberPatternBase extends PluginBase implements NumberPatternInte
   public function __construct(array $configuration, $plugin_id, $plugin_definition, Token $token) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
+    $this->token = $token;
     if (array_key_exists('_entity_id', $configuration)) {
       $this->entityId = $configuration['_entity_id'];
       unset($configuration['_entity_id']);
     }
-    $this->token = $token;
     $this->setConfiguration($configuration);
   }
 
@@ -69,8 +69,15 @@ abstract class NumberPatternBase extends PluginBase implements NumberPatternInte
   /**
    * {@inheritdoc}
    */
-  public function generate(ContentEntityInterface $entity) {
-    return $this->token->replace($this->configuration['pattern'], [$entity->getEntityTypeId() => $entity]);
+  public function getConfiguration() {
+    return $this->configuration;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setConfiguration(array $configuration) {
+    $this->configuration = NestedArray::mergeDeep($this->defaultConfiguration(), $configuration);
   }
 
   /**
@@ -79,7 +86,6 @@ abstract class NumberPatternBase extends PluginBase implements NumberPatternInte
   public function defaultConfiguration() {
     return [
       'pattern' => '',
-      'padding' => 0,
     ];
   }
 
@@ -89,6 +95,7 @@ abstract class NumberPatternBase extends PluginBase implements NumberPatternInte
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $entity_type_id = $form_state->getValue('type');
     $token_types = $entity_type_id ? [$entity_type_id] : [];
+
     $form['pattern'] = [
       '#title' => $this->t('Pattern'),
       '#type' => 'textfield',
@@ -101,25 +108,14 @@ abstract class NumberPatternBase extends PluginBase implements NumberPatternInte
       '#theme' => 'token_tree_link',
       '#token_types' => $token_types,
     ];
-    $form['padding'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Padding'),
-      '#description' => $this->t('Pad the number with leading zeroes. Example: a value of 6 will output 52 as 000052.'),
-      '#default_value' => $this->configuration['padding'],
-      '#min' => 0,
-    ];
+
     return $form;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {
-    $values = $form_state->getValue($form['#parents']);
-    if (strpos($values['pattern'], '{number}') === FALSE) {
-      $form_state->setError($form['pattern'], t('Missing the required placeholder {number}.'));
-    }
-  }
+  public function validateConfigurationForm(array &$form, FormStateInterface $form_state) {}
 
   /**
    * {@inheritdoc}
@@ -130,22 +126,16 @@ abstract class NumberPatternBase extends PluginBase implements NumberPatternInte
 
       $this->configuration = [];
       $this->configuration['pattern'] = $values['pattern'];
-      $this->configuration['padding'] = $values['padding'];
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  public function getConfiguration() {
-    return $this->configuration;
-  }
+  public function generate(ContentEntityInterface $entity) {
+    $pattern = $this->configuration['pattern'];
 
-  /**
-   * {@inheritdoc}
-   */
-  public function setConfiguration(array $configuration) {
-    $this->configuration = NestedArray::mergeDeep($this->defaultConfiguration(), $configuration);
+    return $this->token->replace($pattern, [$entity->getEntityTypeId() => $entity]);
   }
 
 }
