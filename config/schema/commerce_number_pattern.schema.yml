@@ -8,9 +8,9 @@ commerce_number_pattern.commerce_number_pattern.*:
     label:
       type: label
       label: 'Label'
-    type:
+    targetEntityType:
       type: string
-      label: 'Pattern type'
+      label: 'Entity type'
     plugin:
       type: string
       label: 'Plugin'

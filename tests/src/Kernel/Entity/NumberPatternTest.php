@@ -17,14 +17,15 @@ class NumberPatternTest extends NumberPatternKernelTestBase {
   /**
    * @covers ::id
    * @covers ::label
-   * @covers ::getType
+   * @covers ::getTargetEntityTypeId
+   * @covers ::setTargetEntityTypeId
    * @covers ::getPlugin
    * @covers ::getPluginId
    * @covers ::getPluginConfiguration
    */
   public function testNumberPattern() {
     $values = [
-      'type' => 'entity_test_with_store',
+      'targetEntityType' => 'entity_test_with_store',
       'plugin' => 'monthly',
       'configuration' => [
         'initial_sequence' => 100,
@@ -36,7 +37,9 @@ class NumberPatternTest extends NumberPatternKernelTestBase {
     $number_pattern = $this->createNumberPattern('test_id', 'Test label', $values);
     $this->assertEquals('test_id', $number_pattern->id());
     $this->assertEquals('Test label', $number_pattern->label());
-    $this->assertEquals($values['type'], $number_pattern->getType());
+    $this->assertEquals($values['targetEntityType'], $number_pattern->getTargetEntityTypeId());
+    $number_pattern->setTargetEntityTypeId('entity_test');
+    $this->assertEquals('entity_test', $number_pattern->getTargetEntityTypeId());
 
     $number_pattern_plugin = $number_pattern->getPlugin();
     $this->assertInstanceOf(NumberPatternInterface::class, $number_pattern_plugin);

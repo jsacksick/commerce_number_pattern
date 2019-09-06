@@ -48,7 +48,7 @@ class NumberPatternTest extends CommerceWebDriverTestBase {
     $number_pattern = NumberPattern::load('foo');
     $this->assertNotEmpty($number_pattern);
     $this->assertEquals('Foo', $number_pattern->label());
-    $this->assertEquals('commerce_store', $number_pattern->getType());
+    $this->assertEquals('commerce_store', $number_pattern->getTargetEntityTypeId());
     $this->assertEquals('monthly', $number_pattern->getPluginId());
   }
 

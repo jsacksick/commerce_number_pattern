@@ -70,7 +70,7 @@ class NumberPatternForm extends EntityForm {
     }
     // The form state will have a plugin value if #ajax was used.
     $plugin = $form_state->getValue('plugin', $number_pattern->getPluginId());
-    $type = $form_state->getValue('type', $number_pattern->getType());
+    $target_entity_type_id = $form_state->getValue('targetEntityType', $number_pattern->getTargetEntityTypeId());
     // Pass the plugin configuration only if the plugin hasn't been changed via #ajax.
     $plugin_configuration = $number_pattern->getPluginId() == $plugin ? $number_pattern->getPluginConfiguration() : [];
 
@@ -104,10 +104,10 @@ class NumberPatternForm extends EntityForm {
       ],
       '#disabled' => !$number_pattern->isNew(),
     ];
-    $form['type'] = [
+    $form['targetEntityType'] = [
       '#type' => 'select',
       '#title' => $this->t('Type'),
-      '#default_value' => $type,
+      '#default_value' => $target_entity_type_id,
       '#options' => $options,
       '#required' => TRUE,
       '#disabled' => !$number_pattern->isNew(),
@@ -116,7 +116,7 @@ class NumberPatternForm extends EntityForm {
         'wrapper' => $wrapper_id,
       ],
     ];
-    if (!$type) {
+    if (!$target_entity_type_id) {
       return $form;
     }
 
@@ -137,7 +137,7 @@ class NumberPatternForm extends EntityForm {
       '#plugin_type' => 'commerce_number_pattern',
       '#plugin_id' => $plugin,
       '#default_value' => $plugin_configuration,
-      "#entity_type" => $type,
+      "#entity_type" => $target_entity_type_id,
     ];
 
     return $form;

@@ -16,7 +16,6 @@ class NumberPatternListBuilder extends ConfigEntityListBuilder {
   public function buildHeader() {
     $header['label'] = $this->t('Pattern');
     $header['id'] = $this->t('Machine name');
-    $header['type'] = $this->t('Type');
     return $header + parent::buildHeader();
   }
 
@@ -26,7 +25,6 @@ class NumberPatternListBuilder extends ConfigEntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     $row['label'] = $entity->label();
     $row['id'] = $entity->id();
-    $row['type'] = $entity->getType();
     return $row + parent::buildRow($entity);
   }
 

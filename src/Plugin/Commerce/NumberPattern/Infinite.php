@@ -9,7 +9,7 @@ use Drupal\commerce_number_pattern\Sequence;
  *
  * @CommerceNumberPattern(
  *   id = "infinite",
- *   label = @Translation("Infinite (one single number, that is never reset, and incremented infinetly)"),
+ *   label = @Translation("Infinite (Never reset)"),
  * )
  */
 class Infinite extends SequentialNumberPatternBase {

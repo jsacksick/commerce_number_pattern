@@ -43,7 +43,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBase;
  *   config_export = {
  *     "id",
  *     "label",
- *     "type",
+ *     "targetEntityType",
  *     "plugin",
  *     "configuration",
  *   },
@@ -73,11 +73,11 @@ class NumberPattern extends ConfigEntityBase implements NumberPatternInterface {
   protected $label;
 
   /**
-   * The number pattern type (e.g commerce_order).
+   * The target entity type ID.
    *
    * @var string
    */
-  protected $type;
+  protected $targetEntityType;
 
   /**
    * The plugin ID.
@@ -103,8 +103,15 @@ class NumberPattern extends ConfigEntityBase implements NumberPatternInterface {
   /**
    * {@inheritdoc}
    */
-  public function getType() {
-    return $this->type;
+  public function getTargetEntityTypeId() {
+    return $this->targetEntityType;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setTargetEntityTypeId($entity_type_id) {
+    return $this->targetEntityType = $entity_type_id;
   }
 
   /**

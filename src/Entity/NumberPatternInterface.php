@@ -8,12 +8,25 @@ use Drupal\Core\Entity\EntityWithPluginCollectionInterface;
 interface NumberPatternInterface extends ConfigEntityInterface, EntityWithPluginCollectionInterface {
 
   /**
-   * Gets the number pattern type (e.g commerce_order).
+   * Gets the target entity type ID.
+   *
+   * This is the entity type for which the pattern will be used.
+   * For example, "commerce_order".
    *
    * @return string
-   *   The number pattern type.
+   *   The target entity type ID.
    */
-  public function getType();
+  public function getTargetEntityTypeId();
+
+  /**
+   * Sets the target entity type ID.
+   *
+   * @param string $entity_type_id
+   *   The target entity type ID.
+   *
+   * @return $this
+   */
+  public function setTargetEntityTypeId($entity_type_id);
 
   /**
    * Gets the number pattern plugin.

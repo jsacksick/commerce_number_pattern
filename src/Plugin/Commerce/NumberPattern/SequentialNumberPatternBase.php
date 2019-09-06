@@ -109,7 +109,7 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
 
-    $entity_type_id = $form_state->getValue('type');
+    $entity_type_id = $form_state->getValue('targetEntityType');
     if (!empty($entity_type_id)) {
       $entity_type = $this->entityTypeManager->getDefinition($entity_type_id);
       if ($entity_type->entityClassImplements(EntityStoreInterface::class)) {
