@@ -96,9 +96,9 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
    */
   public function defaultConfiguration() {
     return [
-      'pattern' => '{sequence}',
+      'pattern' => '{number}',
       'per_store_sequence' => TRUE,
-      'initial_sequence' => 1,
+      'initial_number' => 1,
       'padding' => 0,
     ] + parent::defaultConfiguration();
   }
@@ -109,31 +109,43 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
 
+    $form['initial_number'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Initial number'),
+      '#default_value' => $this->configuration['initial_number'],
+      '#min' => 1,
+    ];
+
+    $checkbox_name = 'configuration[' . $this->pluginId . '][use_padding]';
+    $form['use_padding'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use fixed length numbers'),
+      '#default_value' => !empty($this->configuration['padding']),
+    ];
+    $form['padding'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Total number of digits'),
+      '#description' => $this->t('The number will be padded with leading zeroes. Example: a value of 4 will output 52 as 0052.'),
+      '#default_value' => $this->configuration['padding'],
+      '#min' => 0,
+      '#states' => [
+        'visible' => [
+          ':input[name="' . $checkbox_name . '"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
     $entity_type_id = $form_state->getValue('targetEntityType');
     if (!empty($entity_type_id)) {
       $entity_type = $this->entityTypeManager->getDefinition($entity_type_id);
       if ($entity_type->entityClassImplements(EntityStoreInterface::class)) {
         $form['per_store_sequence'] = [
           '#type' => 'checkbox',
-          '#title' => $this->t('Generate a unique sequence for each store'),
+          '#title' => $this->t('Generate sequences on a per-store basis'),
           '#description' => $this->t('Ensures that numbers are not shared between stores.'),
           '#default_value' => $this->configuration['per_store_sequence'],
         ];
       }
     }
-    $form['initial_sequence'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Initial sequence'),
-      '#default_value' => $this->configuration['initial_sequence'],
-      '#min' => 1,
-    ];
-    $form['padding'] = [
-      '#type' => 'number',
-      '#title' => $this->t('Padding'),
-      '#description' => $this->t('Pad the number with leading zeroes. Example: a value of 6 will output 52 as 000052.'),
-      '#default_value' => $this->configuration['padding'],
-      '#min' => 0,
-    ];
 
     return $form;
   }
@@ -145,8 +157,8 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
     parent::validateConfigurationForm($form, $form_state);
 
     $values = $form_state->getValue($form['#parents']);
-    if (strpos($values['pattern'], '{sequence}') === FALSE) {
-      $form_state->setError($form['pattern'], $this->t('Missing the required placeholder {sequence}.'));
+    if (strpos($values['pattern'], '{number}') === FALSE) {
+      $form_state->setError($form['pattern'], $this->t('Missing the required placeholder {number}.'));
     }
   }
 
@@ -158,11 +170,9 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
 
     if (!$form_state->getErrors()) {
       $values = $form_state->getValue($form['#parents']);
-      if (isset($values['per_store_sequence'])) {
-        $this->configuration['per_store_sequence'] = $values['per_store_sequence'];
-      }
-      $this->configuration['initial_sequence'] = $values['initial_sequence'];
-      $this->configuration['padding'] = $values['padding'];
+      $this->configuration['initial_number'] = $values['initial_number'];
+      $this->configuration['padding'] = !empty($values['use_padding']) ? $values['padding'] : '0';
+      $this->configuration['per_store_sequence'] = !empty($values['per_store_sequence']);
     }
   }
 
@@ -171,11 +181,11 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
    */
   public function generate(ContentEntityInterface $entity) {
     $next_sequence = $this->getNextSequence($entity);
-    $sequence = $next_sequence->getSequence();
+    $number = $next_sequence->getNumber();
     if ($this->configuration['padding'] > 0) {
-      $sequence = str_pad($sequence, $this->configuration['padding'], '0', STR_PAD_LEFT);
+      $number = str_pad($number, $this->configuration['padding'], '0', STR_PAD_LEFT);
     }
-    $pattern = str_replace('{sequence}', $sequence, $this->configuration['pattern']);
+    $pattern = str_replace('{number}', $number, $this->configuration['pattern']);
 
     return $this->token->replace($pattern, [$entity->getEntityTypeId() => $entity]);
   }
@@ -185,8 +195,8 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
    */
   public function getInitialSequence(ContentEntityInterface $entity) {
     return new Sequence([
+      'number' => $this->configuration['initial_number'],
       'generated' => $this->time->getCurrentTime(),
-      'sequence' => $this->configuration['initial_sequence'],
       'store_id' => $this->getStoreId($entity),
     ]);
   }
@@ -196,20 +206,19 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
    */
   public function getCurrentSequence(ContentEntityInterface $entity) {
     $query = $this->connection->select('commerce_number_pattern_sequence', 'cnps');
-    $query->fields('cnps', ['store_id', 'sequence', 'generated']);
+    $query->fields('cnps', ['store_id', 'number', 'generated']);
     $query
       ->condition('entity_id', $this->entityId)
       ->condition('store_id', $this->getStoreId($entity));
     $result = $query->execute()->fetchAssoc();
-
     if (empty($result)) {
       return NULL;
     }
 
     return new Sequence([
-      'store_id' => $result['store_id'],
+      'number' => $result['number'],
       'generated' => $result['generated'],
-      'sequence' => $result['sequence'],
+      'store_id' => $result['store_id'],
     ]);
   }
 
@@ -229,17 +238,17 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
     }
     else {
       $sequence = new Sequence([
+        'number' => $current_sequence->getNumber() + 1,
         'generated' => $this->time->getCurrentTime(),
-        'sequence' => $current_sequence->getSequence() + 1,
         'store_id' => $store_id,
       ]);
     }
     $this->connection->merge('commerce_number_pattern_sequence')
       ->fields([
         'entity_id' => $this->entityId,
-        'sequence' => $sequence->getSequence(),
-        'generated' => $sequence->getGeneratedTime(),
         'store_id' => $store_id,
+        'number' => $sequence->getNumber(),
+        'generated' => $sequence->getGeneratedTime(),
       ])
       ->keys([
         'entity_id' => $this->entityId,

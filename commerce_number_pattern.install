@@ -25,14 +25,14 @@ function commerce_number_pattern_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ],
-      'sequence' => [
-        'description' => 'The sequence for the given entity_id/store_id combination.',
+      'number' => [
+        'description' => 'The sequential number.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ],
       'generated' => [
-        'description' => 'The Unix timestamp when the sequence was generated.',
+        'description' => 'The Unix timestamp when the number was generated.',
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,

@@ -20,7 +20,7 @@ class Monthly extends SequentialNumberPatternBase {
    */
   public function defaultConfiguration() {
     return [
-      'pattern' => '[current-date:custom:Y-m]-{sequence}',
+      'pattern' => '[current-date:custom:Y-m]-{number}',
     ] + parent::defaultConfiguration();
   }
 

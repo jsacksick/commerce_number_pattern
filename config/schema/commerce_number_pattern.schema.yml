@@ -39,12 +39,12 @@ commerce_number_pattern_plugin_configuration:
 commerce_number_pattern_sequential_plugin_configuration:
   type: commerce_number_pattern_plugin_configuration
   mapping:
-    per_store_sequence:
-      type: boolean
-      label: 'Generate a unique sequence for each store'
-    initial_sequence:
+    initial_number:
       type: integer
-      label: 'Initial sequence'
+      label: 'Initial number'
     padding:
       type: integer
       label: 'Padding'
+    per_store_sequence:
+      type: boolean
+      label: 'Generate a unique sequence for each store'

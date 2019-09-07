@@ -129,7 +129,6 @@ class NumberPatternForm extends EntityForm {
       '#options' => $plugins,
       '#default_value' => $plugin,
       '#required' => TRUE,
-      '#disabled' => !$number_pattern->isNew(),
       '#ajax' => [
         'callback' => '::ajaxRefresh',
         'wrapper' => $wrapper_id,

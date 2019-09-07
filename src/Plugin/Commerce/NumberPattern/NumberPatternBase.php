@@ -99,6 +99,7 @@ abstract class NumberPatternBase extends PluginBase implements NumberPatternInte
     $form['pattern'] = [
       '#title' => $this->t('Pattern'),
       '#type' => 'textfield',
+      '#description' => $this->t('Allows adding a prefix (such as "INV-") or a suffix to the number.'),
       '#default_value' => $this->configuration['pattern'],
       '#required' => TRUE,
       '#element_validate' => ['token_element_validate'],

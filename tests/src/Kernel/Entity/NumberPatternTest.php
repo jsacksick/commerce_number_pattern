@@ -31,10 +31,10 @@ class NumberPatternTest extends NumberPatternKernelTestBase {
       'targetEntityType' => 'entity_test_with_store',
       'plugin' => 'monthly',
       'configuration' => [
-        'initial_sequence' => 100,
         'pattern' => '[current-date:custom:Y-m]-{number}',
-        'per_store_sequence' => TRUE,
+        'initial_number' => 100,
         'padding' => 0,
+        'per_store_sequence' => TRUE,
       ],
     ];
     $number_pattern = NumberPattern::create($values);

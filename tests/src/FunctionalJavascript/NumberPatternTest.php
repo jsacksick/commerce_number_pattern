@@ -63,7 +63,7 @@ class NumberPatternTest extends CommerceWebDriverTestBase {
       'label' => 'Foo',
       'plugin' => 'yearly',
       'configuration' => [
-        'initial_sequence' => 10,
+        'initial_number' => 10,
         'padding' => 2,
       ],
     ]);
@@ -73,7 +73,7 @@ class NumberPatternTest extends CommerceWebDriverTestBase {
     $this->assertNoField('configuration[yearly][per_store_sequence');
     $edit = [
       'label' => 'Foo!',
-      'configuration[yearly][initial_sequence]' => 2,
+      'configuration[yearly][initial_number]' => 2,
       'configuration[yearly][padding]' => 5,
     ];
     $this->submitForm($edit, 'Save');
@@ -83,7 +83,7 @@ class NumberPatternTest extends CommerceWebDriverTestBase {
     $this->assertNotEmpty($number_pattern);
     $this->assertEquals($edit['label'], $number_pattern->label());
     $configuration = $number_pattern->getPluginConfiguration();
-    $this->assertEquals($edit['configuration[yearly][initial_sequence]'], $configuration['initial_sequence']);
+    $this->assertEquals($edit['configuration[yearly][initial_number]'], $configuration['initial_number']);
     $this->assertEquals($edit['configuration[yearly][padding]'], $configuration['padding']);
   }
 

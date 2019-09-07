@@ -20,7 +20,7 @@ class Yearly extends SequentialNumberPatternBase {
    */
   public function defaultConfiguration() {
     return [
-      'pattern' => '[current-date:custom:Y]-{sequence}',
+      'pattern' => '[current-date:custom:Y]-{number}',
     ] + parent::defaultConfiguration();
   }
 

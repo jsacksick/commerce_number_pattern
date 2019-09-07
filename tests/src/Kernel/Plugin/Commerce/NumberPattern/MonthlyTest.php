@@ -6,7 +6,7 @@ use Drupal\commerce_number_pattern_test\Entity\EntityTestWithStore;
 use Drupal\Tests\commerce_number_pattern\Kernel\NumberPatternKernelTestBase;
 
 /**
- * Tests the monthly invoice number pattern.
+ * Tests the monthly number pattern.
  *
  * @coversDefaultClass \Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern\Monthly
  * @group commerce_number_pattern
@@ -28,11 +28,6 @@ class MonthlyTest extends NumberPatternKernelTestBase {
     $current_date = date('Y-m');
     $this->assertEquals($current_date . '-1', $number_pattern_plugin->generate($entity));
     $this->assertEquals($current_date . '-2', $number_pattern_plugin->generate($entity));
-    $configuration = $number_pattern_plugin->getConfiguration();
-    $configuration['padding'] = 5;
-    $configuration['pattern'] = '[current-date:custom:Y-m]-[entity_test_with_store:store_id:target_id]-{sequence}';
-    $number_pattern_plugin->setConfiguration($configuration);
-    $this->assertEquals($current_date . '-1-00003', $number_pattern_plugin->generate($entity));
 
     // Confirm that the sequence resets after a month.
     $this->rewindTime(strtotime('+1 month'));

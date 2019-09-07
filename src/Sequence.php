@@ -8,21 +8,21 @@ namespace Drupal\commerce_number_pattern;
 final class Sequence {
 
   /**
-   * The sequence.
+   * The number.
    *
    * @var int
    */
-  protected $sequence;
+  protected $number;
 
   /**
-   * The sequence generated timestamp.
+   * The generated timestamp.
    *
    * @var int
    */
   protected $generated;
 
   /**
-   * The sequence store ID.
+   * The store ID.
    *
    * @var int
    */
@@ -35,41 +35,41 @@ final class Sequence {
    *   The definition.
    */
   public function __construct(array $definition) {
-    foreach (['sequence', 'generated'] as $required_property) {
+    foreach (['number', 'generated'] as $required_property) {
       if (empty($definition[$required_property])) {
         throw new \InvalidArgumentException(sprintf('Missing required property %s.', $required_property));
       }
     }
-    $this->sequence = $definition['sequence'];
+    $this->number = $definition['number'];
     $this->generated = $definition['generated'];
     $this->storeId = isset($definition['store_id']) ? $definition['store_id'] : NULL;
   }
 
   /**
-   * Gets the sequence.
+   * Gets the number.
    *
    * @return int
-   *   The sequence.
+   *   The number.
    */
-  public function getSequence() {
-    return $this->sequence;
+  public function getNumber() {
+    return $this->number;
   }
 
   /**
-   * Gets the sequence generated timestamp.
+   * Gets the generated timestamp.
    *
    * @return int
-   *   The sequence generated timestamp.
+   *   The generated timestamp.
    */
   public function getGeneratedTime() {
     return $this->generated;
   }
 
   /**
-   * Gets the sequence store ID.
+   * Gets the store ID.
    *
    * @return int|null
-   *   The sequence store ID, or null if it wasn't specified.
+   *   The store ID, or null if it wasn't specified.
    */
   public function getStoreId() {
     return $this->storeId;
