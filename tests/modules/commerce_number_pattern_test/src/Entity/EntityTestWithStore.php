@@ -27,6 +27,7 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   links = {
  *     "canonical" = "/entity_test_with_store/{entity_test_with_store}",
  *   },
+ *   allow_number_patterns = TRUE,
  * )
  */
 class EntityTestWithStore extends ContentEntityBase implements EntityStoreInterface {

@@ -81,12 +81,14 @@ class NumberPatternForm extends EntityForm {
     $entity_types = $this->entityTypeManager->getDefinitions();
     $options = [];
     foreach ($entity_types as $entity_type) {
-      // Skip config and non commerce entity types.
-      if (!$entity_type->entityClassImplements(ContentEntityInterface::class) ||
-        strpos($entity_type->id(), 'commerce_') !== 0) {
-        continue;
+      if ($entity_type->get('allow_number_patterns')) {
+        $options[$entity_type->id()] = $entity_type->getLabel();
       }
-      $options[$entity_type->id()] = $entity_type->getLabel();
+    }
+    if (empty($target_entity_type_id) && count($options) === 1) {
+      // There's only one option, pre-select it.
+      $option_ids = array_keys($options);
+      $target_entity_type_id = reset($option_ids);
     }
 
     $form['label'] = [
@@ -115,6 +117,7 @@ class NumberPatternForm extends EntityForm {
         'callback' => '::ajaxRefresh',
         'wrapper' => $wrapper_id,
       ],
+      '#access' => count($options) > 1,
     ];
     if (!$target_entity_type_id) {
       return $form;

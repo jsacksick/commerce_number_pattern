@@ -37,9 +37,11 @@ class NumberPatternTest extends CommerceWebDriverTestBase {
   public function testAdd() {
     $this->drupalGet('admin/commerce/config/number-patterns/add');
     $page = $this->getSession()->getPage();
+    // Confirm that the target entity type field is hidden when there's only
+    // one option.
+    $this->assertSession()->fieldNotExists('targetEntityType');
+
     $page->fillField('label', 'Foo');
-    $page->fillField('type', 'commerce_store');
-    $this->waitForAjaxToFinish();
     $page->selectFieldOption('plugin', 'monthly');
     $this->waitForAjaxToFinish();
     $this->submitForm([], 'Save');
@@ -48,7 +50,7 @@ class NumberPatternTest extends CommerceWebDriverTestBase {
     $number_pattern = NumberPattern::load('foo');
     $this->assertNotEmpty($number_pattern);
     $this->assertEquals('Foo', $number_pattern->label());
-    $this->assertEquals('commerce_store', $number_pattern->getTargetEntityTypeId());
+    $this->assertEquals('entity_test_with_store', $number_pattern->getTargetEntityTypeId());
     $this->assertEquals('monthly', $number_pattern->getPluginId());
   }
 
@@ -58,7 +60,6 @@ class NumberPatternTest extends CommerceWebDriverTestBase {
   public function testEdit() {
     $number_pattern = NumberPattern::create([
       'id' => 'foo',
-      'type' => 'commerce_store',
       'label' => 'Foo',
       'plugin' => 'yearly',
       'configuration' => [
