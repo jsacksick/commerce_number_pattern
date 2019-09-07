@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\commerce_number_pattern\Kernel\Entity;
 
+use Drupal\commerce_number_pattern\Entity\NumberPattern;
 use Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern\NumberPatternInterface;
 use Drupal\Tests\commerce_number_pattern\Kernel\NumberPatternKernelTestBase;
 
@@ -25,6 +26,8 @@ class NumberPatternTest extends NumberPatternKernelTestBase {
    */
   public function testNumberPattern() {
     $values = [
+      'id' => 'test_id',
+      'label' => 'Test label',
       'targetEntityType' => 'entity_test_with_store',
       'plugin' => 'monthly',
       'configuration' => [
@@ -34,13 +37,14 @@ class NumberPatternTest extends NumberPatternKernelTestBase {
         'padding' => 0,
       ],
     ];
-    $number_pattern = $this->createNumberPattern('test_id', 'Test label', $values);
+    $number_pattern = NumberPattern::create($values);
     $this->assertEquals('test_id', $number_pattern->id());
     $this->assertEquals('Test label', $number_pattern->label());
     $this->assertEquals($values['targetEntityType'], $number_pattern->getTargetEntityTypeId());
     $number_pattern->setTargetEntityTypeId('entity_test');
     $this->assertEquals('entity_test', $number_pattern->getTargetEntityTypeId());
 
+    /** @var \Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern\NumberPatternInterface $number_pattern_plugin */
     $number_pattern_plugin = $number_pattern->getPlugin();
     $this->assertInstanceOf(NumberPatternInterface::class, $number_pattern_plugin);
     $this->assertEquals('monthly', $number_pattern_plugin->getPluginId());
