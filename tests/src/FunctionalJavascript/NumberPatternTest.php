@@ -87,4 +87,63 @@ class NumberPatternTest extends CommerceWebDriverTestBase {
     $this->assertEquals($edit['configuration[yearly][padding]'], $configuration['padding']);
   }
 
+  /**
+   * Tests duplicating a number pattern.
+   */
+  public function testDuplicate() {
+    $number_pattern = NumberPattern::create([
+      'id' => 'foo',
+      'label' => 'Foo',
+      'plugin' => 'yearly',
+      'configuration' => [
+        'initial_number' => 10,
+        'padding' => 2,
+      ],
+    ]);
+    $number_pattern->save();
+
+    $this->drupalGet($number_pattern->toUrl('duplicate-form'));
+    $this->assertSession()->fieldValueEquals('label', 'Foo');
+    $this->getSession()->getPage()->fillField('label', 'Foo2');
+    $this->assertJsCondition('jQuery(".machine-name-value:visible").length > 0');
+    $this->submitForm([], 'Save');
+    $this->assertSession()->pageTextContains('Saved the Foo2 number pattern.');
+
+    // Confirm that the original number pattern is unchanged.
+    $number_pattern = NumberPattern::load('foo');
+    $this->assertNotEmpty($number_pattern);
+    $this->assertEquals('Foo', $number_pattern->label());
+    $this->assertEquals('yearly', $number_pattern->getPluginId());
+
+    // Confirm that the new number pattern has the expected data.
+    $number_pattern = NumberPattern::load('foo2');
+    $this->assertNotEmpty($number_pattern);
+    $this->assertEquals('Foo2', $number_pattern->label());
+    $this->assertEquals('yearly', $number_pattern->getPluginId());
+  }
+
+  /**
+   * Tests deleting a number pattern.
+   */
+  public function testDelete() {
+    $number_pattern = NumberPattern::create([
+      'id' => 'foo',
+      'label' => 'Foo',
+      'plugin' => 'yearly',
+      'configuration' => [
+        'initial_number' => 10,
+        'padding' => 2,
+      ],
+    ]);
+    $number_pattern->save();
+
+    $this->drupalGet($number_pattern->toUrl('delete-form'));
+    $this->assertSession()->pageTextContains(t('Are you sure you want to delete the number pattern @type?', ['@type' => $number_pattern->label()]));
+    $this->saveHtmlOutput();
+    $this->assertSession()->pageTextContains('This action cannot be undone.');
+    $this->submitForm([], 'Delete');
+    $number_pattern_exists = (bool) NumberPattern::load($number_pattern->id());
+    $this->assertEmpty($number_pattern_exists);
+  }
+
 }
