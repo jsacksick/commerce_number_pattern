@@ -4,7 +4,6 @@ namespace Drupal\commerce_number_pattern\Form;
 
 use Drupal\commerce_number_pattern\NumberPatternManager;
 use Drupal\Component\Utility\Html;
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
