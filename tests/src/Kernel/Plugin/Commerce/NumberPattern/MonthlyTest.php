@@ -22,6 +22,7 @@ class MonthlyTest extends NumberPatternKernelTestBase {
     ]);
     $entity->save();
 
+    /** @var \Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern\SequentialNumberPatternInterface $number_pattern_plugin */
     $number_pattern_plugin = $this->pluginManager->createInstance('monthly', [
       '_entity_id' => 'test',
     ]);

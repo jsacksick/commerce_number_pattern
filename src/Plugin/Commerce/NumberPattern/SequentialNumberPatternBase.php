@@ -97,9 +97,9 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
   public function defaultConfiguration() {
     return [
       'pattern' => '{number}',
-      'per_store_sequence' => TRUE,
       'initial_number' => 1,
       'padding' => 0,
+      'per_store_sequence' => TRUE,
     ] + parent::defaultConfiguration();
   }
 
@@ -196,7 +196,7 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
   public function getInitialSequence(ContentEntityInterface $entity) {
     return new Sequence([
       'number' => $this->configuration['initial_number'],
-      'generated' => $this->time->getCurrentTime(),
+      'generated' => $this->time->getRequestTime(),
       'store_id' => $this->getStoreId($entity),
     ]);
   }
@@ -239,7 +239,7 @@ abstract class SequentialNumberPatternBase extends NumberPatternBase implements 
     else {
       $sequence = new Sequence([
         'number' => $current_sequence->getNumber() + 1,
-        'generated' => $this->time->getCurrentTime(),
+        'generated' => $this->time->getRequestTime(),
         'store_id' => $store_id,
       ]);
     }

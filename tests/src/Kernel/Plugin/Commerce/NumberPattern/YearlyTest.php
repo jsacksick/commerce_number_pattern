@@ -22,6 +22,7 @@ class YearlyTest extends NumberPatternKernelTestBase {
     ]);
     $entity->save();
 
+    /** @var \Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern\SequentialNumberPatternInterface $number_pattern_plugin */
     $number_pattern_plugin = $this->pluginManager->createInstance('yearly', [
       '_entity_id' => 'test',
       'per_store_sequence' => FALSE,
@@ -29,6 +30,11 @@ class YearlyTest extends NumberPatternKernelTestBase {
     $current_year = date('Y');
     $this->assertEquals($current_year . '-1', $number_pattern_plugin->generate($entity));
     $this->assertEquals($current_year . '-2', $number_pattern_plugin->generate($entity));
+
+    $current_sequence = $number_pattern_plugin->getCurrentSequence($entity);
+    $this->assertEquals('2', $current_sequence->getNumber());
+    $this->assertEquals(\Drupal::time()->getRequestTime(), $current_sequence->getGeneratedTime());
+    $this->assertEquals('0', $current_sequence->getStoreId());
 
     $second_store = $this->createStore('Second store', 'admin2@example.com', 'online', FALSE);
     $entity->setStoreId($second_store->id());

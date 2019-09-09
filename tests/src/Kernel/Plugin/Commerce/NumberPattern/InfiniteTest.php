@@ -26,6 +26,7 @@ class InfiniteTest extends NumberPatternKernelTestBase {
     ]);
     $entity->save();
 
+    /** @var \Drupal\commerce_number_pattern\Plugin\Commerce\NumberPattern\SequentialNumberPatternInterface $number_pattern_plugin */
     $number_pattern_plugin = $this->pluginManager->createInstance('infinite', [
       '_entity_id' => 'test',
       'padding' => 0,
@@ -33,10 +34,22 @@ class InfiniteTest extends NumberPatternKernelTestBase {
       'per_store_sequence' => TRUE,
       'initial_number' => 1000,
     ]);
+    $initial_sequence = $number_pattern_plugin->getInitialSequence($entity);
+    $this->assertEquals('1000', $initial_sequence->getNumber());
+    $this->assertEquals(\Drupal::time()->getRequestTime(), $initial_sequence->getGeneratedTime());
+    $this->assertEquals($this->store->id(), $initial_sequence->getStoreId());
+    $this->assertNull($number_pattern_plugin->getCurrentSequence($entity));
+
     $this->assertEquals('INV-1000', $number_pattern_plugin->generate($entity));
     $this->assertEquals('INV-1001', $number_pattern_plugin->generate($entity));
-    $number_pattern_plugin->resetSequence();
+    $current_sequence = $number_pattern_plugin->getCurrentSequence($entity);
+    $this->assertEquals('1001', $current_sequence->getNumber());
+    $this->assertEquals(\Drupal::time()->getRequestTime(), $current_sequence->getGeneratedTime());
+    $this->assertEquals($this->store->id(), $current_sequence->getStoreId());
 
+    // Confirm that the sequence can be reset.
+    $number_pattern_plugin->resetSequence();
+    $this->assertNull($number_pattern_plugin->getCurrentSequence($entity));
     $this->assertEquals('INV-1000', $number_pattern_plugin->generate($entity));
     $this->assertEquals('INV-1001', $number_pattern_plugin->generate($entity));
 

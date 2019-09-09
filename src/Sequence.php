@@ -42,7 +42,7 @@ final class Sequence {
     }
     $this->number = $definition['number'];
     $this->generated = $definition['generated'];
-    $this->storeId = isset($definition['store_id']) ? $definition['store_id'] : NULL;
+    $this->storeId = isset($definition['store_id']) ? $definition['store_id'] : 0;
   }
 
   /**
@@ -68,8 +68,8 @@ final class Sequence {
   /**
    * Gets the store ID.
    *
-   * @return int|null
-   *   The store ID, or null if it wasn't specified.
+   * @return int
+   *   The store ID, or 0 if the sequence is not store specific.
    */
   public function getStoreId() {
     return $this->storeId;
